@@ -31,7 +31,7 @@ data class OrderDetailBean(
             @SerializedName("product_name")
             val productName: String, // SENSOR FAUCET FOR WASH BASIN
             @SerializedName("qty")
-            val qty: Int, // 30
+            var qty: Int, // 30
             @SerializedName("ret_qty")
             val retQty: Int, // 0
             @SerializedName("total_amount")

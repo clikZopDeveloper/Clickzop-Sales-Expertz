@@ -50,6 +50,7 @@ class MettingFragment : Fragment(), ApiResponseListner {
     var list: List<Address>? = null
     private var currentLoc: String? = null
     private val permissionId = 2
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -58,6 +58,7 @@ class CreateOrderActivity : AppCompatActivity(), ApiResponseListner,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_order)
+
         if (SalesApp.isEnableScreenshort == true) {
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_SECURE,
@@ -104,8 +105,8 @@ class CreateOrderActivity : AppCompatActivity(), ApiResponseListner,
             }
 
         }
-
     }
+
     fun typeMode(customerBean: GetCustomerBean.Data) {
         binding.handleViewVisible.visibility=View.VISIBLE
         binding.tvMobNo.setText("Mobile Number : "+customerBean.mobile)
@@ -133,7 +134,9 @@ class CreateOrderActivity : AppCompatActivity(), ApiResponseListner,
                 }
             }
         })
+
     }
+
     fun apiProducts() {
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(this, this)
@@ -143,6 +146,7 @@ class CreateOrderActivity : AppCompatActivity(), ApiResponseListner,
         apiClient.getApiPostCall(ApiContants.GetProducts, params)
 
     }
+
     fun apiCatCustmorList() {
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(this, this)
