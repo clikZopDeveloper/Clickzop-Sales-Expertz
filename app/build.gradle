@@ -5,16 +5,16 @@ plugins {
 }
 
 android {
-    namespace = "com.example.sales_expertz"
+    namespace = "com.clikzop.sales_standerd"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.sales_expertz"
+        applicationId = "com.clikzop.sales_standerd"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        archivesBaseName = "sales_expertz" + versionCode
+        archivesBaseName = "sales_standerd" + versionCode
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

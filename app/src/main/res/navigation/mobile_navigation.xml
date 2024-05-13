@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.sales_expertz.Fragment.HomeFragment"
+        android:name="com.clikzop.sales_standerd.Fragment.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_order"
-        android:name="com.example.sales_expertz.Fragment.OrderFragment"
+        android:name="com.clikzop.sales_standerd.Fragment.OrderFragment"
         android:label="@string/menu_order"
         tools:layout="@layout/fragment_order" >
         <action
@@ -27,19 +27,19 @@
 
     <fragment
         android:id="@+id/navigation_report"
-        android:name="com.example.sales_expertz.Fragment.ReportFragment"
+        android:name="com.clikzop.sales_standerd.Fragment.ReportFragment"
         android:label="@string/menu_report"
         tools:layout="@layout/fragment_report" />
 
     <fragment
         android:id="@+id/navigation_metting"
-        android:name="com.example.sales_expertz.Fragment.MettingFragment"
+        android:name="com.clikzop.sales_standerd.Fragment.MettingFragment"
         android:label="@string/menu_metting"
         tools:layout="@layout/fragment_metting" />
 
     <fragment
         android:id="@+id/navigation_setting"
-        android:name="com.example.sales_expertz.Fragment.SettingFragment"
+        android:name="com.clikzop.sales_standerd.Fragment.SettingFragment"
         android:label="@string/menu_setting"
         tools:layout="@layout/fragment_setting" />
 </navigation>

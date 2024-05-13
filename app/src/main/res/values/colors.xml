@@ -30,17 +30,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+    <color name="login_box">#EBEFF8</color>
     <!--welcome screen-->
     <color name="loginbutton">#509c97</color>
     <color name="registerbutton">#0d3848</color>

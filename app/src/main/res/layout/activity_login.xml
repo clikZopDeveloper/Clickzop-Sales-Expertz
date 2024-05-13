@@ -37,7 +37,7 @@
             android:id="@+id/editMobNo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Your Username"
+            android:hint="Enter Your Mobile Number"
             android:background="@drawable/btn_round_shape_white"
             android:layout_marginHorizontal="15dp"
             android:layout_marginTop="@dimen/_40dip"
