@@ -30,6 +30,8 @@ data class DashboardBean(
         val thisMonthExpense: String, // 250
         @SerializedName("office_break_status")
         val officeBreakStatus: Boolean,
+        @SerializedName("day_status")
+        val dayStatus: Boolean,
         @SerializedName("office_break_data")
         val officeBreakData: OfficeBreakData
     )

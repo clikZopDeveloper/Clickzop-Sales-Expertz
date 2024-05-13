@@ -50,6 +50,7 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
     private val binding get() = _binding!!
     val bundle = Bundle()
     var officebreak=false
+    var daysStatus=false
     var officebreakID=0
     lateinit var shopActivity: DashboardActivity
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
@@ -127,15 +128,6 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
     }
 
     fun handleDayStatus() {
-        if (PrefManager.getString(ApiContants.dayStatus, "").equals("start")) {
-            binding.switchDayStart.isChecked = true
-            //    Toast.makeText(this@DashboardActivity, "rr", Toast.LENGTH_SHORT).show()
-            binding.dayStartStatus.text = "Day Start"
-        } else {
-            //     Toast.makeText(this@DashboardActivity, "werwe", Toast.LENGTH_SHORT).show()
-            binding.switchDayStart.isChecked = false
-            binding.dayStartStatus.text = "Day End"
-        }
 
         if (PrefManager.getString(ApiContants.officeBreakStatus, "").equals("start")) {
             binding.switchOfficeBreak.isChecked = true
@@ -151,12 +143,6 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
             binding.switchUpdateOffice.isChecked = false
         }
 
-        binding.switchDayStart.setOnClickListener {
-            getLocation()
-            dialogRemark()
-        }
-
-
         binding.switchUpdateOffice.setOnCheckedChangeListener({ _, isChecked ->
             if (isChecked) {
                 getLocation()
@@ -168,6 +154,14 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                 PrefManager.putString(ApiContants.updateOfficeBreak, "end")
             }
         })
+    }
+
+    fun handleDaysStatus(){
+        binding.switchDayStart.setOnClickListener {
+            getLocation()
+            dialogRemark()
+        }
+
     }
     fun handleOfficeBreak(){
         binding.switchOfficeBreak.setOnCheckedChangeListener({ _, isChecked ->
@@ -183,15 +177,15 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                 PrefManager.putString(ApiContants.officeBreakStatus, "end")
             }
         })
-
     }
 
-    fun apiDayStatus(dayStatus: String, officeStatus: String) {
+    fun apiDayStatus(dayStatus: String, officeStatus: String, rmarks: String) {
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(requireContext(), this)
         val params = Utility.getParmMap()
         params["last_location"] = "${list?.get(0)?.latitude},${list?.get(0)?.longitude}"
         params["office_status"] = officeStatus
+        params["remarks"] = rmarks
         apiClient.progressView.showLoader()
         apiClient.getApiPostCall(dayStatus, params)
 
@@ -279,6 +273,17 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                         handleOfficeBreak()
                     }
 
+                    if (salesmanDashboardBean.data.dayStatus==true){
+                        daysStatus=salesmanDashboardBean.data.dayStatus
+                        handleDaysStatus()
+                        binding.switchDayStart.setChecked(true)
+                        binding.dayStartStatus.text = "Day Start"
+                    }else{
+                        binding.switchDayStart.setChecked(false)
+                        handleDaysStatus()
+                        binding.dayStartStatus.text = "Day End"
+                    }
+
                     binding.llThisMonthExpens.setOnClickListener {
                         startActivity(
                             Intent(
@@ -312,8 +317,6 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                 )
                 if (dayStatusBean.error == false) {
                     binding.dayStartStatus.text = "Day Start"
-                    binding.switchDayStart.isChecked=true
-                    PrefManager.putString(ApiContants.dayStatus, "start")
                     Utility.showSnackBar(requireActivity(), dayStatusBean.msg)
                 }
             }
@@ -325,8 +328,6 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                 )
                 if (dayStatusBean.error == false) {
                     binding.dayStartStatus.text = "Day End"
-                    binding.switchDayStart.isChecked=false
-                    PrefManager.putString(ApiContants.dayStatus, "end")
                     Utility.showSnackBar(requireActivity(), dayStatusBean.msg)
                 }
             }
@@ -554,7 +555,7 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
             dialog.findViewById<TextInputEditText>(R.id.editReamrk) as TextInputEditText
         val tvInOffice = dialog.findViewById<TextInputEditText>(R.id.tvInOffice) as MaterialButton
         val tvOutOffice = dialog.findViewById<TextInputEditText>(R.id.tvOutOffice) as MaterialButton
-        var  dayStausType = "in_office"
+        var  dayStausType = "in-office"
         tvInOffice.setOnClickListener {
             tvInOffice.setBackgroundTintList(
                 ContextCompat.getColorStateList(
@@ -568,7 +569,7 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                     R.color.v_blue_color
                 )
             );
-            dayStausType = "in_office"
+            dayStausType = "in-office"
         }
         tvOutOffice.setOnClickListener {
             tvInOffice.setBackgroundTintList(
@@ -583,7 +584,7 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                     R.color.colorPrimary
                 )
             );
-            dayStausType = "out_office"
+            dayStausType = "out-office"
         }
         val btnSubmit = dialog.findViewById<TextView>(R.id.btnSubmit) as TextView
 
@@ -598,12 +599,17 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                 Toast.makeText(requireContext(), "Enter Remark", Toast.LENGTH_SHORT).show()
             } else {
                 builder.dismiss()
-                if (dayStausType.equals("in_office")) {
-                    apiDayStatus(ApiContants.startDay, dayStausType)
+                if (daysStatus==true){
+                    apiDayStatus(ApiContants.endDay, dayStausType,editReamrk.text.toString())
+
+                }else{
+                    apiDayStatus(ApiContants.startDay, dayStausType,editReamrk.text.toString())
+                }
+                /*if (dayStausType.equals("in_office")) {
 
                 } else {
-                    apiDayStatus(ApiContants.endDay, dayStausType)
-                }
+
+                }*/
             }
         }
     }
