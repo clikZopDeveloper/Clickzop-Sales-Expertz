@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +17,7 @@ import com.clikzop.sales_standerd.Utills.RvCreateOrderClickListner
 import com.stpl.antimatter.Utils.ApiContants
 
 
-class OderDetailListAdapter(var context: Activity, var list: List<OrderDetailBean.Data.OrderDet>, var rvClickListner: RvCreateOrderClickListner) : RecyclerView.Adapter<OderDetailListAdapter.MyViewHolder>(){
+class OderDetailListAdapter(var context: Activity, var list: List<OrderDetailBean.Data.OrderDet>, private val onCheckBoxCheckedListener: (Boolean) -> Unit) : RecyclerView.Adapter<OderDetailListAdapter.MyViewHolder>(){
     private var multiple: MultipleProductBean?=null
     val listw: MutableList<MultipleProductBean> = ArrayList()
 
@@ -47,6 +48,16 @@ class OderDetailListAdapter(var context: Activity, var list: List<OrderDetailBea
 
         holder.tvPrice.text=ApiContants.currency+ list.get(position).price.toString()
         holder.tvTotalAmount.text= ApiContants.currency+list.get(position).totalAmount.toString()
+
+        holder.checkbox.isChecked = list.get(position).isChecked
+        holder.tvQty.isEnabled = list.get(position).isChecked
+
+        holder.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            list.get(position).isChecked = isChecked
+            holder.tvQty.isEnabled = isChecked
+            onCheckBoxCheckedListener(list.any { it.isChecked })
+        }
+
 
 //holder.tvQty.isEnabled=true
         /* multiple = MultipleProductBean(
@@ -107,6 +118,7 @@ class OderDetailListAdapter(var context: Activity, var list: List<OrderDetailBea
         val tvReturnQty: TextView = itemview.findViewById(R.id.tvReturnQty)
         val tvUpdateQty: TextView = itemview.findViewById(R.id.tvUpdateQty)
         val tvTotalAmount: TextView = itemview.findViewById(R.id.tvTotalAmount)
+        val checkbox: CheckBox = itemview.findViewById(R.id.checkbox)
 
     }
 }

@@ -77,7 +77,7 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
             binding.refreshLayout.isRefreshing = false
         }
 
-        apiAllGet()
+
 
         setupFabButtons()
 
@@ -163,6 +163,7 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
         }
 
     }
+
     fun handleOfficeBreak(){
         binding.switchOfficeBreak.setOnCheckedChangeListener({ _, isChecked ->
             if (isChecked) {
@@ -612,6 +613,11 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                 }*/
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        apiAllGet()
     }
 
     override fun onDestroy() {

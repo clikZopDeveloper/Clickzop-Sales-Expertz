@@ -221,6 +221,7 @@
             android:textColor="@color/white"
             android:gravity="center"
             android:textSize="@dimen/_18sp"
+            android:visibility="gone"
             android:background="@color/blue_color"
             android:layout_alignParentBottom="true"
             android:text="Return Selected Items" />

@@ -138,7 +138,7 @@
                     android:drawablePadding="10dp"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="Select Expiry Date" />
+                    android:hint="Select Expense Date" />
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcOfficeTeam"
                     android:layout_width="match_parent"

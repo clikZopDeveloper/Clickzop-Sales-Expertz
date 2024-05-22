@@ -9,14 +9,14 @@ data class CreateOrderBean(
     @SerializedName("error")
     val error: Boolean, // false
     @SerializedName("msg")
-    val msg: String // Order created sucessfully.
+    val msg: String // Return Order created sucessfully.
 ) {
     data class Data(
         @SerializedName("order_id")
-        val orderId: Int, // 29
+        val orderId: String, // 2
         @SerializedName("order_total")
-        val orderTotal: Int, // 13500
+        val orderTotal: Int, // 66
         @SerializedName("product_count")
-        val productCount: Int // 2
+        val productCount: Int // 1
     )
 }

@@ -37,7 +37,8 @@ data class OrderDetailBean(
             @SerializedName("total_amount")
             val totalAmount: String, // 7500.00
             @SerializedName("type")
-            val type: String // box
+            val type: String ,// box
+            var isChecked: Boolean
         )
 
         data class OrderMst(
