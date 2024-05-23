@@ -16,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,7 +55,7 @@ ConnectivityListener.ConnectivityReceiverListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        val drawerLayout: DrawerLayout = binding.drawerLayout
+      //  val drawerLayout: DrawerLayout = binding.drawerLayout
         //  val navView: NavigationView = binding.navView
         val navBottomView: BottomNavigationView = binding.appBarMain.bottomNavView
         myReceiver = ConnectivityListener()
@@ -67,7 +68,7 @@ ConnectivityListener.ConnectivityReceiverListener {
          navController = findNavController(R.id.nav_host_fragment_activity_main)
 
         binding.appBarMain.appbarLayout.ivMenu.setOnClickListener {
-            drawerLayout.open()
+           // drawerLayout.open()
         }
        // ApiContants.getLocation(mFusedLocationClient,this)
         handleRcMaster()
@@ -82,23 +83,43 @@ ConnectivityListener.ConnectivityReceiverListener {
 
         Log.d("token>>>>>", PrefManager.getString(ApiContants.AccessToken, ""))
 
-
-
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-
-        /* appBarConfiguration = AppBarConfiguration(
-             setOf(
-                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
-             ), drawerLayout
-         )*/
-
-
-        //  setupActionBarWithNavController(navController, appBarConfiguration)
         navBottomView.setupWithNavController(navController)
 
+        navBottomView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    navController.popBackStack(R.id.navigation_home,false)
+                    true
+                }
+                R.id.navigation_report -> {
+                    navController.navigate(R.id.navigation_report)
+                    true
+                }
+                R.id.navigation_order -> {
+                    navController.navigate(R.id.navigation_order)
+                    true
+                }
+                R.id.navigation_metting -> {
+                    navController.navigate(R.id.navigation_metting)
+                    true
+                }
+                R.id.navigation_setting -> {
+                    navController.navigate(R.id.navigation_setting)
+                    true
+                }
+                else -> false
+            }
+        }
 
-
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.navigation_home -> navBottomView.menu.findItem(R.id.navigation_home).isChecked = true
+                R.id.navigation_report -> navBottomView.menu.findItem(R.id.navigation_report).isChecked = true
+                R.id.navigation_order -> navBottomView.menu.findItem(R.id.navigation_order).isChecked = true
+                R.id.navigation_metting -> navBottomView.menu.findItem(R.id.navigation_metting).isChecked = true
+                R.id.navigation_setting -> navBottomView.menu.findItem(R.id.navigation_setting).isChecked = true
+            }
+        }
         llMaster.setOnClickListener(View.OnClickListener {
             if (isActive) {
                 isActive = false
@@ -115,7 +136,16 @@ ConnectivityListener.ConnectivityReceiverListener {
 
     }
 
-
+    override fun onBackPressed() {
+        if (navController.currentDestination?.id != R.id.navigation_home) {
+            navController.popBackStack(R.id.navigation_home, false)
+        } else {
+            super.onBackPressed()
+        }
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
     fun replaceFrag(fragment: Int, tag: String, transid: String, title: String){
         val bundle = Bundle()
         //     bundle.putInt(Constants.Frag_Type, fragmentType2)
@@ -123,15 +153,6 @@ ConnectivityListener.ConnectivityReceiverListener {
         bundle.putString("title", title)
         navController.navigate(fragment, bundle)
     }
-    fun apiGetStatus() {
-        SalesApp.isAddAccessToken = true
-        apiClient = ApiController(this, this)
-        val params = Utility.getParmMap()
-        apiClient.progressView.showLoader()
-        apiClient.getApiPostCall(ApiContants.GetStatus, params)
-
-    }
-
 
     override fun success(tag: String?, jsonElement: JsonElement) {
         try {
@@ -189,7 +210,7 @@ ConnectivityListener.ConnectivityReceiverListener {
                     ).putExtra("status_id", id.toString()).putExtra("status_name", status)
                 )
 
-                binding.drawerLayout.closeDrawers()
+              //  binding.drawerLayout.closeDrawers()
             }
         })
         rcStatus.adapter = mAdapter
@@ -203,7 +224,7 @@ ConnectivityListener.ConnectivityReceiverListener {
             RvClickListner {
             override fun clickPos(pos: Int) {
                 if (pos == 0) {
-                    binding.drawerLayout.closeDrawers()
+         //           binding.drawerLayout.closeDrawers()
                 }else if (pos == 1) {
                     startActivity(
                         Intent(
@@ -269,7 +290,7 @@ ConnectivityListener.ConnectivityReceiverListener {
                 } else if (pos == 8) {
 
                 }
-                binding.drawerLayout.closeDrawers()
+             //   binding.drawerLayout.closeDrawers()
             }
 
         })
@@ -299,10 +320,10 @@ ConnectivityListener.ConnectivityReceiverListener {
         return true
     }
 
-    override fun onSupportNavigateUp(): Boolean {
+   /* override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
+    }*/
 
 
 

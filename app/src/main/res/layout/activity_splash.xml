@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:padding="@dimen/_10dp"
-            android:src="@drawable/splash_logo"
+            android:src="@drawable/app_logo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

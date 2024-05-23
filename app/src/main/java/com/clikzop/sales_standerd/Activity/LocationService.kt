@@ -78,7 +78,7 @@ class LocationService : Service() , ApiResponseListner {
                     super.onLocationResult(locationResult)
                      location = locationResult.lastLocation
                     Log.d("LocationService", "Latitude: ${location?.latitude}, Longitude: ${location?.longitude}")
-                //    apiUpdateLoction()
+                    apiUpdateLoction()
                 }
             },
             null

@@ -481,6 +481,8 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
         binding.fabCreateExpnse.setOnClickListener(this)
         binding.fabCreateOrder.setOnClickListener(this)
         binding.fabCreateROder.setOnClickListener(this)
+        binding.tvCreateOrder.setOnClickListener(this)
+        binding.tvCreateExpnse.setOnClickListener(this)
     }
 
     override fun onClick(view: View?) {
@@ -497,8 +499,34 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                     ).putExtra("way", "CreateExpenses")
                 )
             }
+            R.id.tv_create_expnse -> {
+                Log.d("asasd", "Hello create_expnse")
+                startActivity(
+                    Intent(
+                        requireActivity(),
+                        CreateExpensesActivity::class.java
+                    ).putExtra("way", "CreateExpenses")
+                )
+            }
             R.id.fab_create_order -> {
                 Log.d("asasd", "Hello create_order")
+                startActivity(
+                    Intent(
+                        requireActivity(),
+                        CreateOrderActivity::class.java
+                    ).putExtra("way", "CreateOrder")
+                )
+            }
+            R.id.tv_create_order -> {
+                Log.d("asasd", "Hello create_order")
+                // bundle1.putString("way","CreateOrder")
+                /*    val mIntent = Intent(requireContext(), CreateOrderActivity::class.java)
+                    val mBundle = Bundle()
+                    bundle1.putString("way","CreateOrder")
+                    mIntent.putExtras(mBundle)
+                    requireContext().startActivity(mIntent)*/
+                //  findNavController().navigate(R.id.action_navigation_order_to_activity,bundle)
+
                 startActivity(
                     Intent(
                         requireActivity(),
