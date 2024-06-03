@@ -28,6 +28,10 @@ data class DashboardBean(
         val rejectedOrder: String, // 1
         @SerializedName("this_month_expense")
         val thisMonthExpense: String, // 250
+         @SerializedName("total_monthly_sale")
+        val totalMonthlySale: String, // 250
+         @SerializedName("total_year_sale")
+        val totalYearSale: String, // 250
         @SerializedName("office_break_status")
         val officeBreakStatus: Boolean,
         @SerializedName("day_status")

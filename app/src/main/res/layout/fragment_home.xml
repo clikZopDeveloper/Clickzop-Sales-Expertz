@@ -472,6 +472,109 @@
                                     </LinearLayout>
                                 </LinearLayout>
 
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="5dp"
+                                    android:layout_marginTop="@dimen/_10dp"
+                                    android:background="@drawable/btn_round_shape_white"
+                                    android:backgroundTint="@color/login_box"
+                                    android:orientation="vertical"
+                                    android:padding="@dimen/_6dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginHorizontal="@dimen/_10dp"
+                                        android:layout_marginTop="@dimen/_5dip"
+                                        android:fontFamily="@font/roboto_regular"
+                                        android:padding="4dp"
+                                        android:text="Sales"
+                                        android:textColor="@color/black"
+                                        android:textSize="20sp" />
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <LinearLayout
+                                            android:id="@+id/llTotalMonthSale"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:layout_weight="1"
+                                            android:background="@drawable/btn_round_shape_white"
+                                            android:gravity="center"
+                                            android:orientation="vertical"
+                                            android:paddingHorizontal="4dp"
+                                            android:paddingVertical="@dimen/_10dp">
+
+                                            <TextView
+                                                android:id="@+id/tvTotalMonthSale"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/_10dp"
+                                                android:padding="@dimen/_4dip"
+                                                android:text="fetching..."
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/_14sp"
+                                                android:textStyle="bold" />
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/_10dp"
+                                                android:layout_marginBottom="@dimen/_5dip"
+                                                android:padding="@dimen/_4dip"
+                                                android:text="Total Monthly Sale"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/_14sp" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/llTotalYearSale"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:layout_marginStart="@dimen/_5dip"
+                                            android:layout_weight="1"
+                                            android:background="@drawable/btn_round_shape_white"
+                                            android:gravity="center"
+                                            android:orientation="vertical"
+                                            android:paddingHorizontal="4dp"
+                                            android:paddingVertical="@dimen/_10dp">
+
+                                            <TextView
+                                                android:id="@+id/tvTotalYearSale"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/_10dp"
+                                                android:padding="@dimen/_4dip"
+                                                android:text="fetching..."
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/_14sp"
+                                                android:textStyle="bold" />
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/_10dp"
+                                                android:layout_marginBottom="@dimen/_5dip"
+                                                android:padding="@dimen/_4dip"
+                                                android:text="Total Year Sale"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/_14sp" />
+
+                                        </LinearLayout>
+                                    </LinearLayout>
+
+
+                                </LinearLayout>
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"

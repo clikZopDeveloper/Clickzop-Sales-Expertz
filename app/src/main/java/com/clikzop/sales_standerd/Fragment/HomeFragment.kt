@@ -258,10 +258,11 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                         tvApproved.text = salesmanDashboardBean.data.approvedOrder
                         tvRejected.text = salesmanDashboardBean.data.rejectedOrder
                         tvDispatched.text = salesmanDashboardBean.data.dispatchedOrder
-                        tvThisMonthExpenses.text =
-                            ApiContants.currency + salesmanDashboardBean.data.thisMonthExpense
-                        tvLastMonthExpenses.text =
-                            ApiContants.currency + salesmanDashboardBean.data.lastMonthExpense
+                        tvThisMonthExpenses.text =ApiContants.currency + salesmanDashboardBean.data.thisMonthExpense
+                        tvLastMonthExpenses.text =ApiContants.currency + salesmanDashboardBean.data.lastMonthExpense
+
+                        tvTotalMonthSale.text =ApiContants.currency + salesmanDashboardBean.data.totalMonthlySale
+                        tvTotalYearSale.text =ApiContants.currency + salesmanDashboardBean.data.totalYearSale
                     }
 
                     if (salesmanDashboardBean.data.officeBreakStatus==true){
