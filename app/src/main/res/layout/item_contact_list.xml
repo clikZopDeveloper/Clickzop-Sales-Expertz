@@ -53,6 +53,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/llMobMo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5dip"
@@ -93,11 +94,12 @@
                 android:layout_centerVertical="true"
                 android:padding="4dp"/>
             <LinearLayout
+                android:id="@+id/llDesignation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5dip"
                 android:padding="@dimen/_2dip"
-                android:visibility="gone"
+                android:layout_below="@+id/llMobMo"
                 android:layout_marginHorizontal="@dimen/_5dip"
                 android:orientation="horizontal">
 
@@ -128,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5dip"
                 android:padding="@dimen/_2dip"
-                android:visibility="gone"
+                android:layout_below="@+id/llDesignation"
                 android:layout_marginHorizontal="@dimen/_5dip"
                 android:orientation="horizontal">
 

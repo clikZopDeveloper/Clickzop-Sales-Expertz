@@ -122,7 +122,10 @@ var statusType="pending"
         }else{
             apiGetOrder(statusType)
         }
-
+        binding.refreshLayout.setOnRefreshListener {
+            apiGetOrder(statusType)
+            binding.refreshLayout.isRefreshing = false
+        }
          /*   when (receivedData) {
               //  "pending" ->
 

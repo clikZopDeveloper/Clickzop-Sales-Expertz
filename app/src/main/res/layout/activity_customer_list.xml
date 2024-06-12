@@ -7,7 +7,10 @@
                 name="loginViewModel"
                 type="com.example.salesapp.viewmodelactivity.LoginViewModel" />
         </data>-->
-
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -64,5 +67,5 @@
             tools:listitem="@layout/item_customer_list" />
 
     </LinearLayout>
-
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

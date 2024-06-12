@@ -49,9 +49,9 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
     var list: List<Address>? = null
     private val binding get() = _binding!!
     val bundle = Bundle()
-    var officebreak=false
-    var daysStatus=false
-    var officebreakID=0
+    var officebreak = false
+    var daysStatus = false
+    var officebreakID = 0
     lateinit var shopActivity: DashboardActivity
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     override fun onAttach(context: Context) {
@@ -68,7 +68,7 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
+        apiClient = ApiController(activity, this)
         getLocation()
 
         binding.refreshLayout.setOnRefreshListener {
@@ -77,17 +77,26 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
             binding.refreshLayout.isRefreshing = false
         }
 
-
-
         setupFabButtons()
 
-        binding.tvUserName.setText("Hello, "+PrefManager.getString(ApiContants.userName,""))
+        binding.tvUserName.setText("Hello, " + PrefManager.getString(ApiContants.userName, ""))
 
         /* binding.fbAddArchitect.setOnClickListener {
              //  callPGURL("https://atulautomotive.online/architect-signup")
 
          }*/
         handleDayStatus()
+        if (daysStatus.equals(true)) {
+            handleDaysStatus("End Day")
+        } else {
+            handleDaysStatus("Start Day")
+        }
+
+        if (officebreak.equals(true)) {
+            handleOfficeBreak("Office Break Start")
+        } else {
+            handleOfficeBreak("Office Break End")
+        }
 
         binding.fbAddArchitect.setOnClickListener {
             startActivity(
@@ -98,29 +107,29 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
             )
         }
         binding.llPending.setOnClickListener {
-            bundle.putString("KeyStatus","pending")
+            bundle.putString("KeyStatus", "pending")
             findNavController().navigate(R.id.action_navigation_home_to_navigation_order)
             //     (shopActivity).replaceFrag(R.id.action_ShopCategoryFragment_to_ShopSubCategoryFragment, "", data[pos].categoryID, data[pos].categoryName)
 
         }
         binding.llDeliverd.setOnClickListener {
-            bundle.putString("KeyStatus","delivered")
-            findNavController().navigate(R.id.action_navigation_home_to_navigation_order,bundle)
+            bundle.putString("KeyStatus", "delivered")
+            findNavController().navigate(R.id.action_navigation_home_to_navigation_order, bundle)
 
         }
         binding.llApproved.setOnClickListener {
-            bundle.putString("KeyStatus","approved")
-            findNavController().navigate(R.id.action_navigation_home_to_navigation_order,bundle)
+            bundle.putString("KeyStatus", "approved")
+            findNavController().navigate(R.id.action_navigation_home_to_navigation_order, bundle)
 
         }
         binding.llRejected.setOnClickListener {
-            bundle.putString("KeyStatus","rejected")
-            findNavController().navigate(R.id.action_navigation_home_to_navigation_order,bundle)
+            bundle.putString("KeyStatus", "rejected")
+            findNavController().navigate(R.id.action_navigation_home_to_navigation_order, bundle)
 
         }
         binding.llDispatched.setOnClickListener {
-            bundle.putString("KeyStatus","dispatched")
-            findNavController().navigate(R.id.action_navigation_home_to_navigation_order,bundle)
+            bundle.putString("KeyStatus", "dispatched")
+            findNavController().navigate(R.id.action_navigation_home_to_navigation_order, bundle)
 
         }
 
@@ -128,15 +137,6 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
     }
 
     fun handleDayStatus() {
-
-        if (PrefManager.getString(ApiContants.officeBreakStatus, "").equals("start")) {
-            binding.switchOfficeBreak.isChecked = true
-            binding.officeStartStatus.text = "Office Break Start"
-        } else {
-            binding.switchOfficeBreak.isChecked = false
-            binding.officeStartStatus.text = "Office Break End"
-        }
-
         if (PrefManager.getString(ApiContants.updateOfficeBreak, "").equals("start")) {
             binding.switchUpdateOffice.isChecked = true
         } else {
@@ -156,28 +156,19 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
         })
     }
 
-    fun handleDaysStatus(){
+    fun handleDaysStatus(dayStatus: String) {
         binding.switchDayStart.setOnClickListener {
             getLocation()
-            dialogRemark()
+            dialogRemark(dayStatus)
         }
-
     }
 
-    fun handleOfficeBreak(){
-        binding.switchOfficeBreak.setOnCheckedChangeListener({ _, isChecked ->
-            if (isChecked) {
-                binding.officeStartStatus.text = "Office Break Start"
-                getLocation()
-                dialog("Start Break")
-                PrefManager.putString(ApiContants.officeBreakStatus, "start")
-            } else {
-                binding.officeStartStatus.text = "Office Break End"
-                getLocation()
-                dialog("End Break")
-                PrefManager.putString(ApiContants.officeBreakStatus, "end")
-            }
-        })
+    fun handleOfficeBreak(officeStatuss: String) {
+        binding.switchOfficeBreak.setOnClickListener {
+            getLocation()
+            dialogOfficeBreak(officeStatuss)
+        }
+
     }
 
     fun apiDayStatus(dayStatus: String, officeStatus: String, rmarks: String) {
@@ -196,7 +187,7 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(requireContext(), this)
         val params = Utility.getParmMap()
-        if (officebreak==true){
+        if (officebreak == true) {
             params["id"] = officebreakID.toString()
         }
         params["break_status"] = breakStatus
@@ -207,7 +198,6 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
 
     fun apiAllGet() {
         SalesApp.isAddAccessToken = true
-        apiClient = ApiController(activity, this)
         val params = Utility.getParmMap()
         apiClient.progressView.showLoader()
         apiClient.getApiPostCall(ApiContants.getDashboard, params)
@@ -252,40 +242,6 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                     if (salesmanDashboardBean.data.areaReport != null) {
                         areaReport = salesmanDashboardBean.data.areaReport
                     }
-                    binding.apply {
-                        tvPending.text = salesmanDashboardBean.data.pendingOrder
-                        tvDeliverd.text = salesmanDashboardBean.data.deliveredOrder
-                        tvApproved.text = salesmanDashboardBean.data.approvedOrder
-                        tvRejected.text = salesmanDashboardBean.data.rejectedOrder
-                        tvDispatched.text = salesmanDashboardBean.data.dispatchedOrder
-                        tvThisMonthExpenses.text =ApiContants.currency + salesmanDashboardBean.data.thisMonthExpense
-                        tvLastMonthExpenses.text =ApiContants.currency + salesmanDashboardBean.data.lastMonthExpense
-
-                        tvTotalMonthSale.text =ApiContants.currency + salesmanDashboardBean.data.totalMonthlySale
-                        tvTotalYearSale.text =ApiContants.currency + salesmanDashboardBean.data.totalYearSale
-                    }
-
-                    if (salesmanDashboardBean.data.officeBreakStatus==true){
-                         officebreak=salesmanDashboardBean.data.officeBreakStatus
-                         officebreakID=salesmanDashboardBean.data.officeBreakData.id
-                        handleOfficeBreak()
-                        binding.switchOfficeBreak.setChecked(true)
-                    }else{
-                        binding.switchOfficeBreak.setChecked(false)
-                        handleOfficeBreak()
-                    }
-
-                    if (salesmanDashboardBean.data.dayStatus==true){
-                        daysStatus=salesmanDashboardBean.data.dayStatus
-                        handleDaysStatus()
-                        binding.switchDayStart.setChecked(true)
-                        binding.dayStartStatus.text = "Day Start"
-                    }else{
-                        binding.switchDayStart.setChecked(false)
-                        handleDaysStatus()
-                        binding.dayStartStatus.text = "Day End"
-                    }
-
                     binding.llThisMonthExpens.setOnClickListener {
                         startActivity(
                             Intent(
@@ -305,6 +261,47 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                                 .putExtra("lastMonth", salesmanDashboardBean.data.lastMonthExpense)
                         )
                     }
+                    binding.apply {
+                        tvPending.text = salesmanDashboardBean.data.pendingOrder
+                        tvDeliverd.text = salesmanDashboardBean.data.deliveredOrder
+                        tvApproved.text = salesmanDashboardBean.data.approvedOrder
+                        tvRejected.text = salesmanDashboardBean.data.rejectedOrder
+                        tvDispatched.text = salesmanDashboardBean.data.dispatchedOrder
+                        tvThisMonthExpenses.text =
+                            ApiContants.currency + salesmanDashboardBean.data.thisMonthExpense
+                        tvLastMonthExpenses.text =
+                            ApiContants.currency + salesmanDashboardBean.data.lastMonthExpense
+
+                        tvTotalMonthSale.text =
+                            ApiContants.currency + salesmanDashboardBean.data.totalMonthlySale
+                        tvTotalYearSale.text =
+                            ApiContants.currency + salesmanDashboardBean.data.totalYearSale
+                    }
+
+                    if (salesmanDashboardBean.data.officeBreakStatus == true) {
+                        officebreak = salesmanDashboardBean.data.officeBreakStatus
+                        officebreakID = salesmanDashboardBean.data.officeBreakData.id
+                        handleOfficeBreak("Office Break Start")
+                        binding.switchOfficeBreak.setChecked(true)
+                        binding.switchOfficeBreak.text = "Office Break Start"
+                    } else {
+                        binding.switchOfficeBreak.setChecked(false)
+                        handleOfficeBreak("Office Break End")
+                        binding.switchOfficeBreak.text = "Office Break End"
+                    }
+
+                    if (salesmanDashboardBean.data.dayStatus == true) {
+                        daysStatus = salesmanDashboardBean.data.dayStatus
+                        handleDaysStatus("Day Start")
+                        binding.switchDayStart.setChecked(true)
+                        binding.dayStartStatus.text = "Start Day"
+                    } else {
+                        binding.switchDayStart.setChecked(false)
+                        handleDaysStatus("Day Start")
+                        binding.dayStartStatus.text = "End Day"
+                    }
+
+
                     //   handleRcDashboard(salesmanDashboardBean.data)
 
                 } else {
@@ -361,7 +358,7 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
 
     fun dialog(wayType: String) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("Are you sure you want to "+wayType+"?")
+        builder.setMessage("Are you sure you want to " + wayType + "?")
             .setCancelable(false)
             .setPositiveButton("Yes") { dialog, id ->
                 // Delete selected note from database
@@ -371,23 +368,66 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
                 } else {
                     apiOfficeBreakStatus("Stop")
                 }
-
             }
             .setNegativeButton("No") { dialog, id ->
                 // Dismiss the dialog
                 dialog.dismiss()
-
-                /*if (binding.switchOfficeBreak.isChecked==true){
-                    binding.switchOfficeBreak.isChecked=false
-                }else{
-                    binding.switchOfficeBreak.isChecked=true
+                binding.switchUpdateOffice.isChecked = true
+            /*    if (binding.switchUpdateOffice.isChecked == true) {
+                    binding.switchUpdateOffice.isChecked = false
+                } else {
+                    binding.switchUpdateOffice.isChecked = true
                 }*/
             }
+        builder.setOnDismissListener {
+            // Ensure the switch is on if the dialog is dismissed without positive action
+            if (!binding.switchUpdateOffice.isChecked) {
+                binding.switchUpdateOffice.isChecked = true
+            }
+        }
         val alert = builder.create()
         alert.show()
 
     }
 
+    fun dialogOfficeBreak(wayType: String) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setMessage("Are you sure you want to " + wayType + "?")
+            .setCancelable(false)
+            .setPositiveButton("Yes") { dialog, id ->
+                // Delete selected note from database
+                dialog.dismiss()
+                if (wayType.equals("Start Break")) {
+                    apiOfficeBreakStatus("Start")
+                } else {
+                    apiOfficeBreakStatus("Stop")
+                }
+            }
+            .setNegativeButton("No") { dialog, id ->
+                // Dismiss the dialog
+                dialog.dismiss()
+           /*     if (wayType.equals("Start Break")) {
+                    binding.switchOfficeBreak.isChecked = true
+                } else {
+                    binding.switchOfficeBreak.isChecked = false
+                }*/
+                if (binding.switchOfficeBreak.isChecked == true) {
+                    binding.switchOfficeBreak.isChecked = false
+                } else {
+                    binding.switchOfficeBreak.isChecked = true
+                }
+                /* if (binding.switchOfficeBreak.isChecked==true){
+                     binding.switchOfficeBreak.isChecked=false
+                 }else{
+                     binding.switchOfficeBreak.isChecked=true
+                 }*/
+
+            }
+
+        val alert = builder.create()
+        alert.show()
+
+    }
     ///////////////////////Location//////////////////////////////
 
     private fun isLocationEnabled(): Boolean {
@@ -398,7 +438,7 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
         )
     }
 
-    @SuppressLint("MissingPermission","SetTextI18n")
+    @SuppressLint("MissingPermission", "SetTextI18n")
     private fun getLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
@@ -568,7 +608,7 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
         }
     }
 
-    fun dialogRemark() {
+    fun dialogRemark(dayStatuss: String) {
         val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog)
             .create()
         val dialog = layoutInflater.inflate(R.layout.dialog_days_reamrk, null)
@@ -583,9 +623,11 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
         val ivClose = dialog.findViewById<ImageView>(R.id.ivClose)
         val editReamrk =
             dialog.findViewById<TextInputEditText>(R.id.editReamrk) as TextInputEditText
+        val dayStartSt = dialog.findViewById<TextView>(R.id.dayStartSt) as TextView
         val tvInOffice = dialog.findViewById<TextInputEditText>(R.id.tvInOffice) as MaterialButton
         val tvOutOffice = dialog.findViewById<TextInputEditText>(R.id.tvOutOffice) as MaterialButton
-        var  dayStausType = "in-office"
+        var dayStausType = "in-office"
+        dayStartSt.setText("Are you sure you want to " + dayStatuss + " ?")
         tvInOffice.setOnClickListener {
             tvInOffice.setBackgroundTintList(
                 ContextCompat.getColorStateList(
@@ -618,22 +660,24 @@ class HomeFragment : Fragment(), ApiResponseListner, View.OnClickListener {
         }
         val btnSubmit = dialog.findViewById<TextView>(R.id.btnSubmit) as TextView
 
-        ivClose.setOnClickListener { builder.dismiss()
-            if (binding.switchDayStart.isChecked==true){
-                binding.switchDayStart.isChecked=false
-            }else{
-                binding.switchDayStart.isChecked=true
-            }}
+        ivClose.setOnClickListener {
+            builder.dismiss()
+            if (binding.switchDayStart.isChecked == true) {
+                binding.switchDayStart.isChecked = false
+            } else {
+                binding.switchDayStart.isChecked = true
+            }
+        }
         btnSubmit.setOnClickListener {
             if (editReamrk.text.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), "Enter Remark", Toast.LENGTH_SHORT).show()
             } else {
                 builder.dismiss()
-                if (daysStatus==true){
-                    apiDayStatus(ApiContants.endDay, dayStausType,editReamrk.text.toString())
+                if (daysStatus == true) {
+                    apiDayStatus(ApiContants.endDay, dayStausType, editReamrk.text.toString())
 
-                }else{
-                    apiDayStatus(ApiContants.startDay, dayStausType,editReamrk.text.toString())
+                } else {
+                    apiDayStatus(ApiContants.startDay, dayStausType, editReamrk.text.toString())
                 }
                 /*if (dayStausType.equals("in_office")) {
 

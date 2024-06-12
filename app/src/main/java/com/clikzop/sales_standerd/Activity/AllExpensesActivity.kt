@@ -44,12 +44,14 @@ class AllExpensesActivity : AppCompatActivity(), ApiResponseListner,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_expenses_list)
+
         if (SalesApp.isEnableScreenshort == true) {
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE
             );
         }
+
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         myReceiver = ConnectivityListener()
 
@@ -59,6 +61,7 @@ class AllExpensesActivity : AppCompatActivity(), ApiResponseListner,
             intent.getStringExtra("lastMonth")?.let {
                 binding.tvLastMonthExpenses.text=ApiContants.currency+it
             }
+        apiClient = ApiController(this, this)
 
         binding.apply {
             igToolbar.tvTitle.text = "Expenses"
@@ -71,13 +74,17 @@ class AllExpensesActivity : AppCompatActivity(), ApiResponseListner,
             openFilterDialog()
         }
 
+        binding.refreshLayout.setOnRefreshListener {
+            apiAllExpenses()
+            binding.refreshLayout.isRefreshing = false
+        }
+
         //tvWalletAmt
-        apiAllExpenses()
+
     }
 
     fun apiAllExpenses() {
         SalesApp.isAddAccessToken = true
-        apiClient = ApiController(this, this)
         val params = Utility.getParmMap()
         params["from_date"] = fromDate
         params["to_date"] = toDate
@@ -217,6 +224,7 @@ class AllExpensesActivity : AppCompatActivity(), ApiResponseListner,
         GeneralUtilities.registerBroadCastReceiver(this, myReceiver)
         SalesApp.setConnectivityListener(this)
         super.onResume()
+        apiAllExpenses()
     }
 
     override fun onNetworkConnectionChange(isconnected: Boolean) {

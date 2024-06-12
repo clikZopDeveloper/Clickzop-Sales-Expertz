@@ -143,10 +143,8 @@ public class ApiController {
                         } else {
                             responseListner.failure(tag, t.getMessage());
                         }
-
                     }
                 });
-
     }
 
     @SuppressLint("CheckResult")

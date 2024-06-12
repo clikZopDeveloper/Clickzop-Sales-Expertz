@@ -107,7 +107,7 @@ dependencies {
 
     /////////////////Chart////////////////////
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.agrawalsuneet.androidlibs:loaderspack:1.2.3'
 
- 
-
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 }

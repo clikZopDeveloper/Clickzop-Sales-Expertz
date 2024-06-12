@@ -120,6 +120,7 @@ ConnectivityListener.ConnectivityReceiverListener {
                 R.id.navigation_setting -> navBottomView.menu.findItem(R.id.navigation_setting).isChecked = true
             }
         }
+
         llMaster.setOnClickListener(View.OnClickListener {
             if (isActive) {
                 isActive = false

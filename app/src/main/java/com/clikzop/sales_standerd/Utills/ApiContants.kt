@@ -13,9 +13,14 @@ import android.location.LocationManager
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
+import android.view.animation.LinearInterpolator
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.agrawalsuneet.loaderspack.loaders.CurvesLoader
+import com.clikzop.sales_standerd.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
@@ -26,7 +31,7 @@ public class ApiContants {
         var isconnectedtonetwork = false
 
 
-        const val BaseUrl="https://demo.salesexpertz.in/sales-manager/api/"//Live URL
+        const val BaseUrl="https://sales1.clikzopexpertz.in/sales-manager/api/"//Live URL
         const val ImgBaseUrl="https://demo.salesexpertz.in/sales-manager/api/"//Image Base URL
 
         const val EmailAddress = "emailID"
@@ -107,15 +112,22 @@ public class ApiContants {
             }
         }
 
-
-
-
-
-
-
-
-
-
+        //////////////////////Loader//////////////////
+        fun loader(context: Context,loaderLayout:LinearLayout){
+            val curvesLoader = CurvesLoader(
+                context,
+                4,
+                100,
+                10,
+                10,
+                160.0f,
+                ContextCompat.getColor(context, R.color.colorPrimary))
+                .apply {
+                    animDuration = 1000
+                    interpolator = LinearInterpolator()
+                }
+            loaderLayout.addView(curvesLoader)
+        }
 
         //////////////////////////Current Location/////////////////////////
         @SuppressLint("MissingPermission", "SetTextI18n")

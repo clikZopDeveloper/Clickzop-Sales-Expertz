@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -11,11 +12,34 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center">
-
         <ProgressBar
             android:layout_margin="16dp"
             android:layout_width="60dp"
-            android:layout_height="60dp" />
+            android:layout_height="60dp"
+            android:visibility="gone"/>
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.Large.Circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:SpinKit_Color="@color/white" />
+        <com.agrawalsuneet.loaderspack.loaders.CurvesLoader
+            android:id="@+id/loaderView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:curves_animDuration="1000"
+            app:curves_curveColor="@color/white"
+            app:curves_curveSweepAngle="160"
+            app:curves_curveWidth="5dp"
+            android:visibility="gone"
+            android:layout_margin="16dp"
+            android:padding="@dimen/_10dp"
+            android:layout_gravity="center"
+            app:curves_distanceBetweenCurves="5dp"
+            app:curves_interpolator="@android:anim/linear_interpolator"
+            app:curves_noOfCurves="5"
+            app:curves_outermostCurveRadius="80dp" />
 
     </LinearLayout>
 </layout>

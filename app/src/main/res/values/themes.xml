@@ -43,7 +43,7 @@
 
     <style name="Theme.SalesApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="DialogFragmentTheme" parent="android:style/Theme.Translucent">
+    <style name="DialogFragmentTheme" parent="Theme.SalesApp">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>

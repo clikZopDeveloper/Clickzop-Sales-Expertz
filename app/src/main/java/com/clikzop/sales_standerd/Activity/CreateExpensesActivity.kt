@@ -79,7 +79,7 @@ class CreateExpensesActivity : AppCompatActivity(), ApiResponseListner,
         binding.igToolbar.ivMenu.setOnClickListener { finish() }
 
         way = intent.getStringExtra("way")!!
-        //      requestPermission()
+              requestPermission()
 
         //   callCityListAdapter()
         if (way.equals("CreateExpenses")) {
@@ -98,7 +98,8 @@ class CreateExpensesActivity : AppCompatActivity(), ApiResponseListner,
 
         binding.apply {
             btnUplaodImages.setOnClickListener {
-                openCameraDialog(SELECT_PICTURES1, CAMERA_PERMISSION_CODE1)
+                ClickPicCamera(CAMERA_PERMISSION_CODE1)
+             //   openCameraDialog(SELECT_PICTURES1, CAMERA_PERMISSION_CODE1)
             }
 
             btnSubmit.setOnClickListener {
@@ -312,7 +313,7 @@ class CreateExpensesActivity : AppCompatActivity(), ApiResponseListner,
 
         if (requestCode == CAMERA_PERMISSION_CODE1) {
             try {
-                Toast.makeText(this@CreateExpensesActivity, "sdfsd", Toast.LENGTH_SHORT).show()
+               // Toast.makeText(this@CreateExpensesActivity, "sdfsd", Toast.LENGTH_SHORT).show()
 
                 val imageBitmap = data?.extras?.get("data") as Bitmap
                 binding.btnAadharFront.setImageBitmap(imageBitmap)

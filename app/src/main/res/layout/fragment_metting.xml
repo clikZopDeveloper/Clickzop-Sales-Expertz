@@ -6,25 +6,71 @@
     <data>
 
     </data>
-
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         tools:context=".Fragment.OrderFragment">
-        <include
-            android:id="@+id/appbarLayout"
-            layout="@layout/toolbar" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/appbarLayout"
+        layout="@layout/toolbar" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcTeamContactList"
+    <LinearLayout
+        android:id="@+id/llSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingVertical="@dimen/_10dp"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/edSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_below="@+id/appbarLayout"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="4"
-            tools:listitem="@layout/item_customer_list" />
+            android:layout_weight="1"
+            android:background="@drawable/btn_round_shape"
+            android:paddingVertical="6dp"
+            android:hint="Search here..."
+            android:padding="8dp"
+            android:layout_marginStart="@dimen/_5dip"
+            android:textSize="16sp"
+            android:layout_marginEnd="@dimen/_5dip"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+        <ImageView
+            android:id="@+id/ivSearch"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="@dimen/_2dip"
+            android:visibility="gone"
+            android:layout_marginEnd="@dimen/_5dip"
+            android:layout_marginStart="@dimen/_2dip"
+            android:background="@drawable/circle"
+            android:src="@drawable/ic_search_orange"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/app_color"
+            android:tint="@color/white"/>
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcTeamContactList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/llSearch"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="2"
+        tools:listitem="@layout/item_customer_list" />
+
+</LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fb_AddMeting"
@@ -39,4 +85,5 @@
             android:src="@drawable/ic_baseline_add_24"
             app:tint="@android:color/white" />
     </RelativeLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

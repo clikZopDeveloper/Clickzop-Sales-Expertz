@@ -59,7 +59,5 @@ class OrderListAdapter(
         val tvPrice: TextView = itemview.findViewById(R.id.tvPrice)
         val tvDate: TextView = itemview.findViewById(R.id.tvDate)
 
-
     }
-
 }

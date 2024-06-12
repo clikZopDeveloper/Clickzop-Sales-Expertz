@@ -17,18 +17,20 @@
 
 
         <ImageView
+            android:id="@+id/ivCmpLogo"
             android:layout_width="@dimen/_200dip"
             android:layout_height="100dp"
             android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_20dip"
             android:layout_marginVertical="@dimen/_20dip"
             android:src="@drawable/app_logo"/>
 
-
-    <LinearLayout
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_below="@+id/ivCmpLogo"
         android:background="@drawable/topround"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_60dip">
@@ -92,6 +94,7 @@
             android:textColor="@color/colorPrimary"
             android:textSize="16sp" />
         <!-- android:onClick="@{()->loginViewModel.submit()}"-->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -126,8 +129,22 @@
                 android:textStyle="bold"/>
 
         </LinearLayout>
-    </LinearLayout>
 
+          <!--  <com.agrawalsuneet.loaderspack.loaders.CurvesLoader
+                android:id="@+id/loaderView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:curves_animDuration="1000"
+                app:curves_curveColor="@color/white"
+                app:curves_curveSweepAngle="160"
+                app:curves_curveWidth="5dp"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                app:curves_distanceBetweenCurves="5dp"
+                app:curves_interpolator="@android:anim/linear_interpolator"
+                app:curves_noOfCurves="5"
+                app:curves_outermostCurveRadius="80dp" />-->
+        </LinearLayout>
 
     </LinearLayout>
 

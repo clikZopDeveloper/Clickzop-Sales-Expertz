@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -65,7 +66,6 @@ class LoginActivity : AppCompatActivity(), ApiResponseListner {
         binding.btnLogin.setOnClickListener {
             doLogin()
         }
-
     }
 
     private fun doLogin() {
@@ -86,34 +86,39 @@ class LoginActivity : AppCompatActivity(), ApiResponseListner {
         val params = Utility.getParmMap()
         params["mobile"] = binding.editMobNo.text.toString()
         params["password"] = binding.editPassword.text.toString()
-
         apiClient.progressView.showLoader()
+      //  binding.loaderView.visibility=View.VISIBLE
         apiClient.getApiPostCall(ApiContants.login, params)
 
     }
 
     override fun success(tag: String?, jsonElement: JsonElement) {
         try {
-            apiClient.progressView.hideLoader()
+       //     binding.loaderView.visibility=View.GONE
+           apiClient.progressView.hideLoader()
             if (tag == ApiContants.login) {
                 val loginModel = apiClient.getConvertIntoModel<LoginBean>(
                     jsonElement.toString(),
                     LoginBean::class.java
                 )
+
                 if (loginModel.error == false) {
                     PrefManager.putString(ApiContants.AccessToken, loginModel.data.token)
                     PrefManager.putString(
                         ApiContants.userName,
                         loginModel.data.name
                     )
+
                     PrefManager.putString(
                         ApiContants.mobileNumber,
                         loginModel.data.mobile
                     )
+
                     PrefManager.putString(
                         ApiContants.EmailAddress,
                         loginModel.data.email
                     )
+
                     PrefManager.putString(
                         ApiContants.UserType,
                         loginModel.data.userType
@@ -123,27 +128,25 @@ class LoginActivity : AppCompatActivity(), ApiResponseListner {
                         ApiContants.password,
                         binding.editPassword.text.toString()
                     )
+
                     Toast.makeText(activity, loginModel.msg, Toast.LENGTH_SHORT).show()
                     GeneralUtilities.launchActivity(this, DashboardActivity::class.java)
                     finishAffinity()
+
                 }
             }
         } catch (e: Exception) {
             Log.d("error>>", e.localizedMessage)
         }
-
     }
 
     override fun failure(tag: String?, errorMessage: String) {
-
         apiClient.progressView.hideLoader()
-
         Utility.showSnackBar(activity, errorMessage)
     }
 
 
-    class ViewModelFactory(val context: LoginActivity) :
-        ViewModelProvider.Factory {
+    class ViewModelFactory(val context: LoginActivity) :ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
                 LoginViewModel(context) as T

@@ -53,7 +53,7 @@ class ReportFragment : Fragment(), ApiResponseListner {
             requireActivity().onBackPressed()
         }
         binding.appbarLayout.tvTitle.text = "Report"
-
+        apiClient = ApiController(requireContext(), this)
         typeMode()
 
         binding.ivFilter.setOnClickListener {
@@ -70,8 +70,11 @@ class ReportFragment : Fragment(), ApiResponseListner {
         toDate = current.toString()
         System.out.println("yyyy-mm-dd: " + fromDate + "\n" + current)
 
-        apiCustomerWiseReport()
-        apiCustomerList()
+        binding.refreshLayout.setOnRefreshListener {
+            apiCustomerWiseReport()
+            apiCustomerList()
+            binding.refreshLayout.isRefreshing = false
+        }
 
         return root
 
@@ -79,7 +82,6 @@ class ReportFragment : Fragment(), ApiResponseListner {
 
     fun apiCustomerList() {
         SalesApp.isAddAccessToken = true
-        apiClient = ApiController(requireContext(), this)
         val params = Utility.getParmMap()
         apiClient.progressView.showLoader()
         apiClient.getApiPostCall(ApiContants.GetCustomer, params)
@@ -87,7 +89,6 @@ class ReportFragment : Fragment(), ApiResponseListner {
 
     fun apiCustomerWiseReport() {
         SalesApp.isAddAccessToken = true
-        apiClient = ApiController(requireContext(), this)
         val params = Utility.getParmMap()
         params["from_date"] = fromDate
         params["to_date"] = toDate
@@ -348,4 +349,9 @@ class ReportFragment : Fragment(), ApiResponseListner {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        apiCustomerWiseReport()
+        apiCustomerList()
+    }
 }

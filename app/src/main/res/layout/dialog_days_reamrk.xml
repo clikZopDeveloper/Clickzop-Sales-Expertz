@@ -12,9 +12,10 @@
         android:orientation="horizontal"
         android:padding="6dp">
         <TextView
+            android:id="@+id/dayStartSt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Are you sure you want to End day?"
+            android:text=""
             android:textColor="@color/black"
             android:layout_centerHorizontal="true"
             android:textSize="@dimen/_16sp"

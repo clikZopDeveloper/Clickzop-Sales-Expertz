@@ -36,6 +36,7 @@ class ApiClient {
     }
 
     private fun initOkHttp(context: Context) {
+
         val httpClient = OkHttpClient().newBuilder()
                 .connectTimeout(REQUEST_TIMEOUT.toLong(), TimeUnit.MINUTES)
                 .readTimeout(REQUEST_TIMEOUT.toLong(), TimeUnit.MINUTES)
@@ -49,8 +50,6 @@ class ApiClient {
         httpClient.addInterceptor(ConnectivityInterceptor(context))
         httpClient.addInterceptor { chain ->
             val original = chain.request()
-
-
             if (SalesApp.isAddAccessToken) {
                 var requestBuilder = original.newBuilder()
                         .addHeader("Accept", "application/json")
@@ -58,11 +57,11 @@ class ApiClient {
                         .addHeader("accesstoken", PrefManager.getString(ApiContants.AccessToken,""))
                 val request = requestBuilder.build()
                 chain.proceed(request)
-            } else {
+            }
+            else {
                 var requestBuilder = original.newBuilder()
                         .addHeader("Accept", "application/json")
                         .addHeader("Content-Type", "application/json")
-
                 val request = requestBuilder.build()
                 chain.proceed(request)
             }
@@ -70,6 +69,7 @@ class ApiClient {
         }
 
         okHttpClient = httpClient.build()
+
     }
 
 /*    val chuckerCollector = ChuckerCollector(

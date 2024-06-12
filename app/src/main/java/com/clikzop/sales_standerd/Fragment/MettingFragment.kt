@@ -10,6 +10,8 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -68,28 +70,35 @@ class MettingFragment : Fragment(), ApiResponseListner {
         }
         binding.appbarLayout.tvTitle.text = "Meetings"
         binding.fbAddMeting.setOnClickListener {
-            startActivity(Intent(requireContext(),CreateMeetingActivity::class.java))
+            startActivity(Intent(requireContext(), CreateMeetingActivity::class.java))
         }
-        apiGetMetting()
+        apiClient = ApiController(requireContext(), this)
         getLocation()
+
+        binding.refreshLayout.setOnRefreshListener {
+            apiGetMetting()
+            binding.refreshLayout.isRefreshing = false
+        }
+
         return root
     }
 
     fun apiGetMetting() {
         SalesApp.isAddAccessToken = true
-        apiClient = ApiController(requireContext(), this)
+
         val params = Utility.getParmMap()
-      //  apiClient.progressView.showLoader()
-        apiClient.getApiPostCall(ApiContants.GetMettingList,params)
+        //  apiClient.progressView.showLoader()
+        apiClient.getApiPostCall(ApiContants.GetMettingList, params)
 
     }
+
     fun apiUpdateMeeting(remark: String, ids: Int) {
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(requireContext(), this)
         val params = Utility.getParmMap()
         params["id"] = ids.toString()
         params["remarks"] = remark
-        params["stop_location"] =  "${list?.get(0)?.latitude},${list?.get(0)?.longitude}"
+        params["stop_location"] = "${list?.get(0)?.latitude},${list?.get(0)?.longitude}"
         params["meeting_status"] = "stop"
         apiClient.progressView.showLoader()
         apiClient.getApiPostCall(ApiContants.GetClientMeeting, params)
@@ -115,27 +124,51 @@ class MettingFragment : Fragment(), ApiResponseListner {
                     CreateMeetingBean::class.java
                 )
                 if (UpdateMeetingBean.error == false) {
-                   Toast.makeText(requireContext(),UpdateMeetingBean.msg,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), UpdateMeetingBean.msg, Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
         }
     }
+
     override fun failure(tag: String?, errorMessage: String?) {
         apiClient.progressView.hideLoader()
         Utility.showSnackBar(requireActivity(), errorMessage!!)
     }
+
     fun handleMettingList(data: List<MettingListBean.Data>) {
         binding.rcTeamContactList.layoutManager = LinearLayoutManager(requireContext())
         var mAdapter = MettingListAdapter(requireActivity(), data, object :
             RvStatusComplClickListner {
-            override fun clickPos(status: String,workstatus: String,amt: String, id: Int) {
+            override fun clickPos(status: String, workstatus: String, amt: String, id: Int) {
                 dialogRemark(id)
             }
         })
         binding.rcTeamContactList.adapter = mAdapter
         // rvMyAcFiled.isNestedScrollingEnabled = false
+        mAdapter.notifyDataSetChanged()
+        binding.edSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                if (data != null) {
+                    mAdapter.filter.filter(s)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                mAdapter.filter.filter(s)
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                mAdapter.filter.filter(s)
+                /* if (s.toString().trim { it <= ' ' }.length < 1) {
+                     ivClear.visibility = View.GONE
+                 } else {
+                     ivClear.visibility = View.GONE
+                 }*/
+            }
+        })
 
     }
 
@@ -146,6 +179,7 @@ class MettingFragment : Fragment(), ApiResponseListner {
             LocationManager.NETWORK_PROVIDER
         )
     }
+
     @SuppressLint("MissingPermission", "SetTextI18n")
     private fun getLocation() {
         if (checkPermissions()) {
@@ -154,7 +188,7 @@ class MettingFragment : Fragment(), ApiResponseListner {
                     val location: Location? = task.result
                     if (location != null) {
                         val geocoder = Geocoder(requireActivity(), Locale.getDefault())
-                        list =geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                        list = geocoder.getFromLocation(location.latitude, location.longitude, 1)
                         Log.d("zxxzv", "Lat" + Gson().toJson(list?.get(0)?.latitude))
                         Log.d("zxxzv", "Long" + Gson().toJson(list?.get(0)?.longitude))
                         Log.d("zxxzv", Gson().toJson(list?.get(0)?.countryName))
@@ -172,7 +206,8 @@ class MettingFragment : Fragment(), ApiResponseListner {
                     }
                 }
             } else {
-                Toast.makeText(requireActivity(), "Please turn on location", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireActivity(), "Please turn on location", Toast.LENGTH_LONG)
+                    .show()
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
             }
@@ -180,6 +215,7 @@ class MettingFragment : Fragment(), ApiResponseListner {
             requestPermissions()
         }
     }
+
     private fun requestPermissions() {
         ActivityCompat.requestPermissions(
             requireActivity(),
@@ -190,6 +226,7 @@ class MettingFragment : Fragment(), ApiResponseListner {
             permissionId
         )
     }
+
     private fun checkPermissions(): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 requireActivity(),
@@ -222,9 +259,9 @@ class MettingFragment : Fragment(), ApiResponseListner {
     }
 
     fun dialogRemark(ids: Int) {
-        val builder = AlertDialog.Builder(requireContext(),R.style.CustomAlertDialog)
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog)
             .create()
-        val dialog = layoutInflater.inflate(R.layout.dialog_reamrk,null)
+        val dialog = layoutInflater.inflate(R.layout.dialog_reamrk, null)
 
         builder.setView(dialog)
 
@@ -235,26 +272,29 @@ class MettingFragment : Fragment(), ApiResponseListner {
                 this
             )*/
         val ivClose = dialog.findViewById<ImageView>(R.id.ivClose)
-       val editReamrk = dialog.findViewById<TextInputEditText>(R.id.editReamrk) as TextInputEditText
+        val editReamrk =
+            dialog.findViewById<TextInputEditText>(R.id.editReamrk) as TextInputEditText
 
         val btnSubmit = dialog.findViewById<TextView>(R.id.btnSubmit) as TextView
 
-        ivClose.setOnClickListener {  builder.dismiss() }
+        ivClose.setOnClickListener { builder.dismiss() }
         btnSubmit.setOnClickListener {
 
-            if (editReamrk.text.isNullOrEmpty()){
-                Toast.makeText(requireContext(),"Enter Remark",Toast.LENGTH_SHORT).show()
-            }else{
+            if (editReamrk.text.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "Enter Remark", Toast.LENGTH_SHORT).show()
+            } else {
                 builder.dismiss()
-                apiUpdateMeeting(editReamrk.text.toString(),ids)
+                apiUpdateMeeting(editReamrk.text.toString(), ids)
             }
 
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onResume() {
         super.onResume()
         apiGetMetting()

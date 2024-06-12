@@ -986,9 +986,6 @@ public class GeneralUtilities {
         }
     }*/
 
-
-
-
     public static String setCustomDate(String inputdate) {
         String newformateddate = "";
         String toformatstr = "MMM dd, yyyy | hh:mm aa";
@@ -1010,6 +1007,7 @@ public class GeneralUtilities {
         ClipData data = ClipData.newPlainText(label, text);
         manager.setPrimaryClip(data);
     }
+
     public static void copyText(Context context,String labelView,String value){
         ClipboardManager clipboard = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(labelView,value);
@@ -1136,6 +1134,7 @@ public class GeneralUtilities {
 
         }
     }
+
     public static BottomSheetDialog openBootmSheetDailog(Integer layoutId, int dialogStyle, Activity activity) {
         BottomSheetDialog dialog = new BottomSheetDialog(activity, dialogStyle);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);

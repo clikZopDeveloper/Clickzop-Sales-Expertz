@@ -50,14 +50,19 @@ class ContactListActivity : AppCompatActivity(), ApiResponseListner,
         binding.igToolbar.ivMenu.setImageDrawable(resources.getDrawable(R.drawable.ic_back_black))
         binding.igToolbar.ivMenu.setOnClickListener { finish() }
         binding.igToolbar.tvTitle.text = "Contact List"
+        apiClient = ApiController(this, this)
       //  intent.getStringExtra("customerType")?.let { apiCustomerTypeList(it) }
       //  intent.getStringExtra("status_id")?.let {  }
-        apiTeamContactList()
+
+        binding.refreshLayout.setOnRefreshListener {
+            apiTeamContactList()
+            binding.refreshLayout.isRefreshing = false
+        }
     }
 
     fun apiTeamContactList() {
         SalesApp.isAddAccessToken = true
-        apiClient = ApiController(this, this)
+
         val params = Utility.getParmMap()
         apiClient.progressView.showLoader()
         apiClient.getApiPostCall(ApiContants.getContactList, params)
@@ -200,6 +205,7 @@ class ContactListActivity : AppCompatActivity(), ApiResponseListner,
         GeneralUtilities.registerBroadCastReceiver(this, myReceiver)
         SalesApp.setConnectivityListener(this)
         super.onResume()
+        apiTeamContactList()
     }
 
     override fun onNetworkConnectionChange(isconnected: Boolean) {

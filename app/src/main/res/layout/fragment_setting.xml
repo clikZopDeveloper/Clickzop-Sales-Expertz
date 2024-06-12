@@ -56,8 +56,9 @@
                 android:textSize="@dimen/_16sp"
                 android:layout_marginStart="@dimen/_5dip"
                 android:textColor="@color/black" />
+
             <TextView
-                android:id="@+id/tvMobNo"
+                android:id="@+id/tvEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -70,19 +71,18 @@
                 android:layout_marginStart="@dimen/_5dip"
                 android:textColor="@color/black" />
             <TextView
-                android:id="@+id/tvEmail"
+                android:id="@+id/tvMobNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:layout_toRightOf="@+id/ivImagee"
-                android:layout_below="@+id/tvMobNo"
+                android:layout_below="@+id/tvEmail"
                 android:layout_gravity="center"
                 android:fontFamily="@font/roboto_regular"
                 android:paddingVertical="@dimen/_4dip"
                 android:textSize="@dimen/_16sp"
                 android:layout_marginStart="@dimen/_5dip"
                 android:textColor="@color/black" />
-
             <ImageView
                 android:id="@+id/ivProfile"
                 android:layout_width="@dimen/_30dip"

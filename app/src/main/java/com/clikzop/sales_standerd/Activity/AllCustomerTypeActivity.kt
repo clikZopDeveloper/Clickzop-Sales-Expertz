@@ -144,9 +144,7 @@ class AllCustomerTypeActivity : AppCompatActivity(), ApiResponseListner,
             }else{
           //      apiAccept(status,ids)
             }
-
         }
-
     }
 
     override fun failure(tag: String?, errorMessage: String) {
